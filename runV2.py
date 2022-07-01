@@ -28,25 +28,67 @@ def hex_to_rgb(value):
     return tuple(int(value[i:i+lv//3], 16) for i in range(0, lv, lv//3))
 
 while completed == False:
-    print("Type in '>complete' to get your code or '>gradient' to replace text with a gradient")
+    print("Type in '>complete' to get your code, '>gradient' to replace text with a gradient, '>remove' to remove a text from the list, '>change' to change font of a text, '>swap' to swap text id, '>list' to show a list of text.")
     print("Found text: "+str(len(everytext)))
-    text = input("Insert text > ")
+    text = input("Insert text or command > ")
+    victimchange = 0
     customizing = True
-    if text.lower() == ">complete" or text.lower() == ">gradient":
-        if text.lower() == ">gradient":
-            hex1 = input("Insert color hex number 1 > ").upper()
-            hex2 = input("Insert color hex number 2 > ").upper()
-            chosentext = input("Insert a text id > ")
-            if int(chosentext) and int(chosentext) <= len(everytext):
+    changing = False
+    allow = True
+    if text.lower() == ">gradient":
+        allow = False
+        hex1 = input("Insert color hex number 1 > ").upper()
+        hex2 = input("Insert color hex number 2 > ").upper()
+        chosentext = input("Insert a text id > ")
+        if int(chosentext) and int(chosentext) <= len(everytext):
+            if len(str(hex1)) == 7 and len(str(hex2)) == 7 and str(hex1)[0] == "#" and str(hex2)[0] == "#":
                 gradient(hex1,hex2,int(chosentext))
+                print("Successfully applied gradient.")
             else:
-                print("error has occurred")
+                print("ERROR: color hex was out of range/had a missing hashtag")
         else:
-            for i in range(0,len(temp)):
-                code += temp[i]
-            completed = True
-    else:
-        everytext[len(everytext)] = text
+            print("ERROR: text id is out of range/not a num")
+    if text.lower() == ">complete":
+        allow = False
+        for i in range(0,len(temp)):
+            code += temp[i]
+        completed = True
+    if text.lower() == ">change":
+        victim = input("Insert a text id > ")
+        if int(victim) and int(victim) <= len(everytext):
+            changing = True
+            text = everytext[int(victim)-1]
+        else:
+            print("ERROR: text id is out of range/not a num")
+            allow = False
+    if text.lower() == ">remove":
+        allow = False
+        victimchange = input("Insert a text id > ")
+        if int(victimchange) and int(victimchange) <= len(everytext):
+            everytext.pop(int(victimchange)-1)
+            print("Successfully removed text.")
+        else:
+            print("ERROR: text id is out of range/not a num")
+    if text.lower() == ">swap":
+        allow = False
+        swap1 = input("Insert a text id to swap from > ")
+        swap2 = input("Insert a text id to swap to > ")
+        if int(swap1) and int(swap2) and int(swap1) <= len(everytext):
+            temp[int(swap1)-1] = temp[int(swap2)-1]
+            temp[int(swap2)-1] = temp[int(swap1)-1]
+            everytext[int(swap1)-1] = temp[int(swap2)-1]
+            everytext[int(swap2)-1] = temp[int(swap1)-1]
+    if text.lower() == ">list":
+        allow = False
+        print("ENTERED-TEXT----------------")
+        print(everytext)
+        print("UNMERGED-CODE---------------")
+        print(temp)
+    if allow == True:
+        num = len(temp)
+        if changing == True:
+            num = victimchange
+        everytext[num] = text
         sc = "#000000"
         st = "1" 
         fc = "#FFFFFF" 
@@ -56,7 +98,7 @@ while completed == False:
             print("Supported types: StrokeColor, StrokeThickness, FontColor, FontFace")
             typ = input("Insert type > ")
             if typ.lower() == "finish":
-                temp[len(temp)] = '<stroke color="'+sc+'" thickness="'+st+'"><font color="'+fc+'" face="'+ff+'">'+text+"</font></stroke>"
+                temp[num] = '<stroke color="'+sc+'" thickness="'+st+'"><font color="'+fc+'" face="'+ff+'">'+text+"</font></stroke>"
                 customizing = False
             if typ.lower() == "strokecolor":
                 chex = input("Insert color hex > ")
