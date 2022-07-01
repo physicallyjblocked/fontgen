@@ -76,13 +76,13 @@ while completed == False:
         if int(swap1) and int(swap2) and int(swap1) <= len(everytext):
             temp[int(swap1)-1] = temp[int(swap2)-1]
             temp[int(swap2)-1] = temp[int(swap1)-1]
-            everytext[int(swap1)-1] = temp[int(swap2)-1]
-            everytext[int(swap2)-1] = temp[int(swap1)-1]
+            everytext[int(swap1)-1] = everytext[int(swap2)-1]
+            everytext[int(swap2)-1] = everytext[int(swap1)-1]
     if text.lower() == ">list":
         allow = False
-        print("ENTERED-TEXT----------------")
+        print("ENTERED-TEXT-------------------------")
         print(everytext)
-        print("UNMERGED-CODE---------------")
+        print("UNMERGED-CODE------------------------")
         print(temp)
     if allow == True:
         num = len(temp)
@@ -115,5 +115,5 @@ while completed == False:
 print("CODE---------------------------------")
 print(code)
 print("-------------------------------------")
-print("WARN: If code doesnt work, either you did something wrong or the game is bugging.")
+print("WARN: If code doesnt work, either you did something wrong, the game is bugging, or a bug in this script.")
 input("Press enter to close")
